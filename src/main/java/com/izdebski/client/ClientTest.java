@@ -1,18 +1,20 @@
 package com.izdebski.client;
 
 import com.izdebski.util.HibernateUtil;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
 public class ClientTest {
 
     public static void main(String[] args) {
+        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+            // Check MySQL database version
+            String sql = "select version()";
 
-        try(Session session = HibernateUtil.getSessionFactory().openSession()){
-            String SQL="SELECT version();";
-            String result = (String)session.createNativeQuery(SQL).getSingleResult();
-            System.out.println("MySQL version is:");
+            String result = (String) session.createNativeQuery(sql).getSingleResult();
+            System.out.println("MySql Database Version is:");
             System.out.println(result);
-        }catch(Exception e){
+        } catch (HibernateException e) {
             e.printStackTrace();
         }
     }
